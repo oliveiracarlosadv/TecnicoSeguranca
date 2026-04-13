@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SSTSEMSTSegPrev_CAAO — Interface</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f6f8fa;color:#0b2545;margin:0;padding:0}
+    header{background:#072146;color:#fff;padding:18px 24px}
+    main{padding:24px;max-width:900px;margin:20px auto;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(3,10,25,0.08)}
+    h1{margin:0;font-size:20px}
+    label{display:block;margin-top:12px;font-weight:600}
+    input[type=text], textarea, select{width:100%;padding:10px;margin-top:6px;border:1px solid #cbd5e1;border-radius:6px;font-size:14px}
+    button{margin-top:14px;padding:10px 14px;background:#0b5fff;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700}
+    footer{margin-top:18px;text-align:center;color:#6b7280;font-size:13px}
+    .doc-preview{white-space:pre-wrap;background:#f3f4f6;padding:12px;border-radius:6px;border:1px dashed #e5e7eb;margin-top:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SSTSEMSTSegPrev_CAAO</h1>
+  </header>
+  <main>
+    <p><strong>Documento:</strong> Geração de conteúdo técnico e institucional em SST e NRs.</p>
+    <form id="skillForm" onsubmit="return false;">
+      <label for="tipo">Que tipo de SKILL quer criar?</label>
+      <select id="tipo" required>
+        <option value="">-- selecione o foco --</option>
+        <option value="InvestigacaoAcidente">Investigação de Acidente</option>
+        <option value="ChecklistNR">Checklist NR Geral</option>
+        <option value="LaudoTecnico">Laudo Técnico Simplificado</option>
+        <option value="ComunicacaoInterna">Comunicação Interna de Segurança</option>
+        <option value="PPRA_PGR">PPRA / PGR - Estrutura Inicial</option>
+        <option value="Outro">Outro (descrever abaixo)</option>
+      </select>
+
+      <label for="descricao">Descrição breve do documento / dados essenciais</label>
+      <textarea id="descricao" rows="4" placeholder="Informe local, data do evento, envolvidos, riscos observados, ou instruções específicas..." required></textarea>
+
+      <label for="nomeDoc">Nome do documento (ex.: Relatório de Investigação de Acidente)</label>
+      <input type="text" id="nomeDoc" placeholder="Nome do documento" required>
+
+      <button id="gerar">Gerar Documento</button>
+    </form>
+
+    <div id="output" class="doc-preview" aria-live="polite" style="display:none"></div>
+
+    <script>
+      (function(){
+        // Pergunta inicial obrigatória ao usuário antes de executar qualquer geração
+        var tipoPrompt = prompt("Que tipo de SKILL quer criar? (ex.: Investigação de Acidente, Checklist NR, Laudo Técnico, PPRA/PGR)");
+        if(tipoPrompt !== null && tipoPrompt.trim() !== ""){
+          var sel = document.getElementById('tipo');
+          for(var i=0;i<sel.options.length;i++){
+            if(sel.options[i].text.toLowerCase().indexOf(tipoPrompt.toLowerCase()) !== -1){
+              sel.selectedIndex = i;
+              break;
+            }
+          }
+        }
+
+        document.getElementById('gerar').addEventListener('click', function(){
+          var tipo = document.getElementById('tipo').value || 'Outro';
+          var descricao = document.getElementById('descricao').value.trim();
+          var nomeDoc = document.getElementById('nomeDoc').value.trim() || 'Documento';
+          var data = '2026-04-13';
+          var skillName = 'SSTSEMSTSegPrev_CAAO';
+          if(!descricao || !nomeDoc){
+            alert('Preencha todos os campos obrigatórios.');
+            return;
+          }
+          var header = nomeDoc + ' | ' + skillName + ' | ' + data;
+          var body = '';
+          body += 'Documento: ' + nomeDoc + '\\n';
+          body += 'SKILL: ' + skillName + '\\n';
+          body += 'Data de criação: ' + data + '\\n\\n';
+          body += 'Tipo de SKILL selecionado: ' + tipo + '\\n\\n';
+          body += 'Descrição fornecida:\\n' + descricao + '\\n\\n';
+          body += 'Conteúdo gerado (modelo):\\n';
+          if(tipo === 'InvestigacaoAcidente'){
+            body += '- Resumo do evento;\\n- Sequência de eventos;\\n- Causas imediatas e raízes;\\n- Ações corretivas e preventivas;\\n- Responsáveis e prazos.\\n';
+          } else if(tipo === 'ChecklistNR'){
+            body += '- Itens verificados;\\n- Conformidades;\\n- Não conformidades;\\n- Observações e recomendações.\\n';
+          } else if(tipo === 'LaudoTecnico'){
+            body += '- Identificação;\\n- Objetivo;\\n- Metodologia;\\n- Conclusão técnica;\\n- Assinatura do responsável técnico.\\n';
+          } else if(tipo === 'PPRA_PGR'){
+            body += '- Identificação da empresa;\\n- Levantamento de riscos;\\n- Medidas de controle;\\n- Plano de ação.\\n';
+          } else {
+            body += '- Estrutura padrão: introdução; desenvolvimento; conclusão; recomendações.\\n';
+          }
+          body += '\\n---\\nRodapé: ' + skillName + ' — @oliveiracarlosadv';
+          var output = document.getElementById('output');
+          output.style.display = 'block';
+          output.textContent = header + '\\n\\n' + body;
+        });
+      })();
+    </script>
+
+    <footer>
+      SSTSEMSTSegPrev_CAAO — @oliveiracarlosadv
+    </footer>
+  </main>
+</body>
+</html>
